@@ -1,1 +1,0 @@
-"""Device management endpoints (CRUD)."""

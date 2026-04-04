@@ -1,1 +1,0 @@
-"""Device CRUD business logic."""

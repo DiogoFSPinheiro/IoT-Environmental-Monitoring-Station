@@ -1,1 +1,0 @@
-"""SensorReading ORM model."""

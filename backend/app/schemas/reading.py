@@ -1,1 +1,0 @@
-"""SensorReading request/response schemas."""

@@ -1,1 +1,0 @@
-"""Device request/response schemas."""
