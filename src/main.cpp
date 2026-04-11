@@ -6,9 +6,9 @@
 
 #include "config/pins.h"
 #include "shared.h"
-#include "dht22.h"
-#include "bh1750.h"
-#include "pir.h"
+#include "drv_dht22.h"
+#include "drv_bh1750.h"
+#include "drv_pir.h"
 
 // Forward declarations — implementations live in src/tasks/
 void task_dht22(void *pvParameters);

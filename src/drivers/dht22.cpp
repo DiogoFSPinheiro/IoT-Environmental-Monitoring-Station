@@ -1,4 +1,4 @@
-#include "dht22.h"
+#include "drv_dht22.h"
 #include "../config/pins.h"
 
 #include <DHT.h>

@@ -1,4 +1,4 @@
-#include "pir.h"
+#include "drv_pir.h"
 #include "../config/pins.h"
 
 #include <Arduino.h>

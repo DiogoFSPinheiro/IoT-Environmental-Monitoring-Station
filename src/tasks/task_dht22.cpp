@@ -1,7 +1,7 @@
 #include <Arduino_FreeRTOS.h>
 
 #include "shared.h"
-#include "dht22.h"
+#include "drv_dht22.h"
 
 // Read interval: DHT22 datasheet max sampling rate is 0.5 Hz (1 read / 2 s).
 static constexpr TickType_t READ_INTERVAL = pdMS_TO_TICKS(2000);

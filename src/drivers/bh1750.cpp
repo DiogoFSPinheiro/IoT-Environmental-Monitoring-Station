@@ -1,4 +1,4 @@
-#include "bh1750.h"
+#include "drv_bh1750.h"
 
 #include <BH1750.h>
 

@@ -2,8 +2,8 @@
 #include <semphr.h>
 
 #include "shared.h"
-#include "bh1750.h"
-#include "pir.h"
+#include "drv_bh1750.h"
+#include "drv_pir.h"
 
 // Task wakes every 250 ms to poll the PIR.
 static constexpr TickType_t TASK_PERIOD    = pdMS_TO_TICKS(250);
