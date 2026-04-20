@@ -49,6 +49,17 @@ DDRD  &= ~(1 << PD2);   // clear bit → INPUT
 PORTD |=  (1 << PD2);   // set bit in PORT → enables internal pull-up
 ```
 
+### Set pin as INPUT without pull-up
+```cpp
+// Arduino:     pinMode(2, INPUT);
+DDRD  &= ~(1 << PD2);   // clear bit → INPUT
+PORTD &= ~(1 << PD2);   // clear bit in PORT → no pull-up (floating)
+```
+
+> Use this when the circuit has its own external pull-down (e.g. HC-SR501 PIR module).
+> Enabling the internal pull-up on a pin that already has an external pull-down wastes
+> current and may affect signal levels.
+
 ### Drive pin LOW
 ```cpp
 // Arduino:     digitalWrite(2, LOW);
@@ -149,11 +160,12 @@ Moving the sensor to a different pin means changing 4 lines in `pins.h` — noth
 
 | Arduino call                    | Bare-metal equivalent                                      |
 |---------------------------------|------------------------------------------------------------|
-| `pinMode(2, OUTPUT)`            | `DDRD \|= (1 << PD2)`                                     |
-| `pinMode(2, INPUT_PULLUP)`      | `DDRD &= ~(1 << PD2); PORTD \|= (1 << PD2)`              |
-| `digitalWrite(2, LOW)`          | `PORTD &= ~(1 << PD2)`                                    |
-| `digitalWrite(2, HIGH)`         | `PORTD \|= (1 << PD2)`                                    |
-| `digitalRead(2)`                | `(PIND >> PD2) & 1`                                       |
+| `pinMode(2, OUTPUT)`            | `DDRD \|= (1 << PD2)`                                               |
+| `pinMode(2, INPUT_PULLUP)`      | `DDRD &= ~(1 << PD2); PORTD \|= (1 << PD2)`                        |
+| `pinMode(2, INPUT)`             | `DDRD &= ~(1 << PD2); PORTD &= ~(1 << PD2)`                        |
+| `digitalWrite(2, LOW)`          | `PORTD &= ~(1 << PD2)`                                              |
+| `digitalWrite(2, HIGH)`         | `PORTD \|= (1 << PD2)`                                              |
+| `digitalRead(2)`                | `(PIND >> PD2) & 1`                                                 |
 
 ---
 
