@@ -114,6 +114,33 @@ static uint32_t measure_pulse(uint8_t pin, uint8_t level, uint32_t timeout_us) {
 
 ---
 
+## 9. Timer wraparound breaks unsigned subtraction when the counter doesn't fill the type
+
+When using a hardware timer for microsecond timing, a common mistake is dividing the raw
+counter to convert units before storing it — e.g., `TCNT1 >> 1` to get 0.5µs ticks into
+µs values. This returns a `uint16_t` that only cycles **0 → 32767**, not **0 → 65535**.
+
+Unsigned subtraction for elapsed-time checks relies on the type wrapping at its full range:
+
+```cpp
+// WRONG — timer1_micros() wraps at 32768, not 65536
+// If start=32760 and current=10 after wrap:
+// (uint16_t)(10 - 32760) = 32786 ← looks like 32ms elapsed, triggers false timeout
+static inline uint16_t timer1_micros() { return TCNT1 >> 1; }
+
+// CORRECT — TCNT1 wraps at 65536 which matches uint16_t exactly
+static inline uint16_t timer1_ticks()  { return TCNT1; }
+```
+
+**Symptom:** periodic clusters of 2-3 failed reads separated by ~34 seconds of clean reads.
+The failure clusters appear when the 2-second read cadence drifts into alignment with the
+32.768ms Timer1 overflow period.
+
+**Fix:** work in raw ticks throughout. Multiply all µs timeout and threshold values by 2
+(at 2MHz, 1 tick = 0.5µs). The `uint16_t` subtraction then wraps correctly at 65536.
+
+---
+
 ## Stack
 
 - **Board:** Arduino Uno R3 (ATmega328P, 2KB SRAM)
