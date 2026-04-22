@@ -3,9 +3,6 @@
 #include <stdint.h>
 #include <avr/io.h>
 
-#define HIGH        1
-#define LOW         0
-
 // One-wire sensor — D2 = Port D, bit 2
 constexpr uint8_t PIN_DHT22 = 2;
 #define DHT22_DDR   DDRD

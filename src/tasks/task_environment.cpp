@@ -10,7 +10,8 @@ static constexpr TickType_t LIGHT_INTERVAL = pdMS_TO_TICKS(1000);
 // Suppress PIR readings for 60 s after power-on (HC-SR501 warm-up).
 static constexpr uint32_t PIR_WARMUP_TICKS = pdMS_TO_TICKS(60000UL);
 
-void task_environment(void *pvParameters) {
+void task_environment(void *pvParameters)
+{
     (void)pvParameters;
 
     Serial.println(F("[DBG] task_environment started"));
@@ -18,15 +19,18 @@ void task_environment(void *pvParameters) {
     TickType_t last_light_read = xTaskGetTickCount();
     bool hwm_printed = false;
 
-    for (;;) {
+    for (;;)
+    {
         const TickType_t now = xTaskGetTickCount();
         const uint16_t ts =
             static_cast<uint16_t>(now / configTICK_RATE_HZ);
 
         // --- PIR (every wake, after warm-up) ---
-        if (now >= PIR_WARMUP_TICKS) {
+        if (now >= PIR_WARMUP_TICKS)
+        {
             float motion;
-            if (pir_read(&motion) && motion > 0.5f) {
+            if (pir_read(&motion) && motion > 0.5f)
+            {
                 sensor_reading_t reading;
                 reading.type        = SensorType::MOTION;
                 reading.value       = motion;
@@ -36,11 +40,14 @@ void task_environment(void *pvParameters) {
             }
         }
 
-        if ((now - last_light_read) >= LIGHT_INTERVAL) {
+        if ((now - last_light_read) >= LIGHT_INTERVAL)
+        {
             last_light_read = now;
-            if (xSemaphoreTake(i2c_mutex, pdMS_TO_TICKS(100)) == pdTRUE) {
+            if (xSemaphoreTake(i2c_mutex, pdMS_TO_TICKS(100)) == pdTRUE)
+            {
                 float lux;
-                if (bh1750_read(&lux)) {
+                if (bh1750_read(&lux))
+                {
                     sensor_reading_t reading;
                     reading.type        = SensorType::LIGHT;
                     reading.value       = lux;
@@ -52,7 +59,8 @@ void task_environment(void *pvParameters) {
             }
         }
 
-        if (!hwm_printed && ts >= 3) {
+        if (!hwm_printed && ts >= 3)
+        {
             Serial.print(F("[DBG] env stack HWM (bytes): "));
             Serial.println(uxTaskGetStackHighWaterMark(nullptr));
             hwm_printed = true;

@@ -82,11 +82,13 @@ bool bh1750_init()
 
     if (!twi_start())
         return false;
-    if (!twi_write((BH1750_ADDR << 1) | 0)) {
+    if (!twi_write((BH1750_ADDR << 1) | 0))
+    {
         twi_stop();
         return false;
     }
-    if (!twi_write(BH1750_POWER_ON)) {
+    if (!twi_write(BH1750_POWER_ON))
+    {
         twi_stop();
         return false;
     }
@@ -96,11 +98,13 @@ bool bh1750_init()
 
     if (!twi_start())
         return false;
-    if (!twi_write((BH1750_ADDR << 1) | 0)) {
+    if (!twi_write((BH1750_ADDR << 1) | 0))
+    {
         twi_stop();
         return false;
     }
-    if (!twi_write(BH1750_CONT_HR)) {
+    if (!twi_write(BH1750_CONT_HR))
+    {
         twi_stop();
         return false;
     }
@@ -118,15 +122,18 @@ bool bh1750_read(float *out)
 
     if (!twi_start())
         return false;
-    if (!twi_addr_r()) {
+    if (!twi_addr_r())
+    {
         twi_stop();
         return false;
     }
-    if (!twi_read_ack(&msb)) {
+    if (!twi_read_ack(&msb))
+    {
         twi_stop();
         return false;
     }
-    if (!twi_read_nack(&lsb)) {
+    if (!twi_read_nack(&lsb))
+    {
         twi_stop();
         return false;
     }

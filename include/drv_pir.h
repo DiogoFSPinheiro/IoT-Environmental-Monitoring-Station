@@ -2,6 +2,9 @@
 
 #include <stdbool.h>
 
+#define HIGH        1
+#define LOW         0
+
 /**
  * @brief Initialise the HC-SR501 PIR sensor pin.
  *

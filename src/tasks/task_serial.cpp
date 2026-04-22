@@ -6,7 +6,8 @@ static constexpr uint8_t FLOAT_BUF_LEN = 10;
 // Full output line: "[00000] MOTION: detected\0" = 26 chars max; 40 is safe.
 static constexpr uint8_t LINE_BUF_LEN = 40;
 
-void task_serial(void *pvParameters) {
+void task_serial(void *pvParameters)
+{
     (void)pvParameters;
 
     Serial.println(F("[DBG] task_serial started"));
@@ -19,14 +20,17 @@ void task_serial(void *pvParameters) {
     sensor_reading_t reading;
     bool hwm_printed = false;
 
-    for (;;) {
+    for (;;)
+    {
         // Block up to 5 s; print heartbeat if no reading arrives (debug).
-        if (xQueueReceive(sensor_data_queue, &reading, pdMS_TO_TICKS(5000)) != pdTRUE) {
+        if (xQueueReceive(sensor_data_queue, &reading, pdMS_TO_TICKS(5000)) != pdTRUE)
+        {
             Serial.println(F("[DBG] queue empty — waiting for sensor data"));
             continue;
         }
 
-        switch (reading.type) {
+        switch (reading.type)
+        {
             case SensorType::TEMPERATURE:
                 dtostrf(reading.value, 5, 2, fval);
                 snprintf(line, sizeof(line), "[%05u] TEMP:   %s C",
@@ -56,7 +60,8 @@ void task_serial(void *pvParameters) {
 
         Serial.println(line);
 
-        if (!hwm_printed) {
+        if (!hwm_printed)
+        {
             Serial.print(F("[DBG] serial stack HWM (bytes): "));
             Serial.println(uxTaskGetStackHighWaterMark(nullptr));
             hwm_printed = true;
