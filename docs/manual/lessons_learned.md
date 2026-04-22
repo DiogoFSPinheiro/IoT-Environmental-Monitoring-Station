@@ -9,7 +9,7 @@ Sharing so others don't lose the same time.
 
 The Adafruit DHT library disables interrupts (`cli()`) for up to **80ms** while bit-banging the one-wire protocol.
 
-feilipu/FreeRTOS uses the hardware Watchdog Timer (WDT) as its tick source, configured in **interrupt+reset mode** with a 15ms timeout. The WDT ISR re-arms itself on every tick. But with interrupts globally disabled:
+feilipu/FreeRTOS uses the hardware Watchdog Timer (WDT) as its tick source, configured in **interrupt+reset mode** with a 15ms timeout. The WDT ISR (Interrupt Service Routine) re-arms itself on every tick. But with interrupts globally disabled:
 
 - At **t=15ms** — WDT fires, interrupt is pending but blocked by `cli()`, the interrupt-enable bit is auto-cleared
 - At **t=30ms** — WDT fires again, interrupt-enable is already cleared, reset-enable is still armed → **silent hardware reset**
@@ -22,7 +22,7 @@ The board reboots every time the DHT22 task runs. No crash output, no error mess
 
 ## 2. The serial monitor resets your Arduino on first connection
 
-PlatformIO's serial monitor toggles the DTR line when it opens. On Arduino Uno, DTR is wired through a capacitor to the RESET pin. This resets the board right as the FreeRTOS scheduler starts — producing garbage bytes in the output. The second boot works fine because DTR is already stable.
+PlatformIO's serial monitor toggles the DTR (Data Terminal Ready) line when it opens. On Arduino Uno, DTR is wired through a capacitor to the RESET pin. This resets the board right as the FreeRTOS scheduler starts — producing garbage bytes in the output. The second boot works fine because DTR is already stable.
 
 **Fix:** Add this to `platformio.ini`:
 ```ini
@@ -63,12 +63,12 @@ With the scheduler suspended, FreeRTOS cannot count ticks that arrive during the
 
 ## 5. Sensor library labels don't always match standard names
 
-The BH1750 module I used labels its pins **DAT** and **CSL** instead of the standard **SDA** and **SCL**. Same pins, non-standard labels.
+The BH1750 module I used labels its pins **DAT** and **CSL** instead of the standard **SDA (Serial Data)** and **SCL (Serial Clock)**. Same pins, non-standard labels.
 
 - **DAT = SDA → A4** on Arduino Uno
 - **CSL = SCL → A5** on Arduino Uno
 
-The ADDR pin must be tied to GND to set I2C address `0x23`. If it floats, the sensor won't respond and init hangs — which on this FreeRTOS setup triggers the WDT reset loop.
+The ADDR pin must be tied to GND to set I2C (Inter-Integrated Circuit) address `0x23`. If it floats, the sensor won't respond and init hangs — which on this FreeRTOS setup triggers the WDT reset loop.
 
 ---
 
@@ -76,7 +76,7 @@ The ADDR pin must be tied to GND to set I2C address `0x23`. If it floats, the se
 
 `configMINIMAL_STACK_SIZE` set in `platformio.ini` build flags gets **overridden** by the feilipu library's own `FreeRTOSConfig.h` (to 192 words = 384 bytes). The idle task is also created *after* `setup()` returns — so the free RAM measurement printed at the end of `setup()` doesn't include it.
 
-Budget roughly **420 bytes** for the idle task (stack + TCB) on top of whatever `free_ram()` reports at scheduler start.
+Budget roughly **420 bytes** for the idle task (stack + TCB (Task Control Block)) on top of whatever `free_ram()` reports at scheduler start.
 
 ---
 
@@ -146,4 +146,4 @@ The failure clusters appear when the 2-second read cadence drifts into alignment
 - **Board:** Arduino Uno R3 (ATmega328P, 2KB SRAM)
 - **RTOS:** feilipu/FreeRTOS 11.1.0
 - **Build system:** PlatformIO
-- **Sensors:** DHT22, BH1750, HC-SR501 PIR
+- **Sensors:** DHT22, BH1750, HC-SR501 PIR (Passive Infrared)

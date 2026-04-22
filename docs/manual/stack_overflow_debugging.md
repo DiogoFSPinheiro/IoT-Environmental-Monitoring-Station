@@ -34,9 +34,9 @@ ran for ~24 seconds accumulating corruption before something critical broke.
 Increase `task_environment` stack to **128 bytes** in `xTaskCreate`.
 
 ### Key lesson
-Stack overflow on AVR FreeRTOS is **silent by default** — no exception, no log.
+Stack overflow on AVR (Alf and Vegard's RISC) FreeRTOS is **silent by default** — no exception, no log.
 The task just corrupts whatever lives next to it in RAM. The crash appears
-unrelated and delayed, making this very hard to diagnose without HWM checks.
+unrelated and delayed, making this very hard to diagnose without HWM (High Water Mark) checks.
 
 ---
 
@@ -92,7 +92,7 @@ Bug 1 — too few bytes.
 
 ### Fix — two-part
 
-**Part 1:** Move the large buffers out of the task stack into BSS (static storage):
+**Part 1:** Move the large buffers out of the task stack into BSS (Block Started by Symbol — the linker section for zero-initialized globals):
 ```cpp
 // In task_serial — these stay allocated permanently in BSS, but cost 0 stack.
 static char line[40];
@@ -113,7 +113,7 @@ tasks always are). It trades stack bytes for BSS bytes.
 
 ## What was NOT a bug — Wire.setWireTimeout
 
-During debugging, missing LIGHT readings were observed and a Wire I2C lockup
+During debugging, missing LIGHT readings were observed and a Wire I2C (Inter-Integrated Circuit) lockup
 was suspected. `Wire.setWireTimeout(3000, true)` was added to prevent
 `Wire.requestFrom()` from blocking forever.
 

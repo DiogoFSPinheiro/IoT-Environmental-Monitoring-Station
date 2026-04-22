@@ -1,6 +1,6 @@
-# AVR I/O Register Model
+# AVR (Alf and Vegard's RISC) I/O Register Model
 
-Reference for bare-metal GPIO and timers on the ATmega328P (Arduino Uno R3).
+Reference for bare-metal GPIO (General-Purpose Input/Output) and timers on the ATmega328P (Arduino Uno R3).
 This replaces Arduino's `pinMode()`, `digitalWrite()`, `digitalRead()`, `micros()`, and `delay()` abstractions.
 
 ---
@@ -252,7 +252,7 @@ Requires `F_CPU` to be defined (PlatformIO sets this automatically for the Uno: 
 | Timer  | Bits | Used by Arduino           | Status in this project   |
 |--------|------|---------------------------|--------------------------|
 | Timer0 | 8    | `millis()` / `micros()`   | free (Arduino dropped)   |
-| Timer1 | 16   | Servo, PWM pins 9/10      | DHT22 µs counter         |
+| Timer1 | 16   | Servo, PWM (Pulse Width Modulation) pins 9/10 | DHT22 µs counter |
 | Timer2 | 8    | `tone()`, PWM pins 3/11   | free                     |
-| WDT    | —    | Watchdog                  | FreeRTOS tick source     |
-| TWI    | —    | I2C hardware (SDA/SCL)    | BH1750                   |
+| WDT (Watchdog Timer)        | — | Watchdog                                        | FreeRTOS tick source |
+| TWI (Two Wire Interface)    | — | I2C (Inter-Integrated Circuit) hardware (SDA/SCL) | BH1750             |

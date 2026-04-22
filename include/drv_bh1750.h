@@ -1,7 +1,18 @@
 #pragma once
 
 #include <stdbool.h>
-#include <BH1750.h>
+
+#include <avr/io.h>
+#include <util/delay.h>
+
+#define BH1750_ADDR     0x23
+#define BH1750_POWER_ON 0x01
+#define BH1750_CONT_HR  0x10  // Continuous High Resolution Mode, 1 lux, 120ms
+
+// Loop-count timeout for TWINT polling. FreeRTOS owns Timer1 in CTC mode,
+// so TCNT1-based timing would false-trigger on every tick reset.
+// At 16MHz each TWI byte takes ~1440 cycles; 10000 iterations gives ~27x margin.
+#define TWI_TIMEOUT_ITERS 10000U
 
 /**
  * @brief Initialise the BH1750FVI light sensor.

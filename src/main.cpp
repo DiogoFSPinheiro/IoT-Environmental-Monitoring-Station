@@ -9,7 +9,6 @@ void wdt_init() {
     wdt_disable();
     __asm__ __volatile__ ("ret");
 }
-#include <Wire.h>
 #include <queue.h>
 #include <semphr.h>
 
@@ -52,8 +51,6 @@ void setup() {
     Serial.print(F("Free RAM before RTOS init: "));
     Serial.print(free_ram());
     Serial.println(F(" bytes"));
-
-    Wire.begin();
 
     // --- Create FreeRTOS shared objects ---
     sensor_data_queue = xQueueCreate(4, sizeof(sensor_reading_t));
