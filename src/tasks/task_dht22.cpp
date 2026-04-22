@@ -1,6 +1,3 @@
-#include <Arduino.h>
-#include <Arduino_FreeRTOS.h>
-
 #include "shared.h"
 #include "drv_dht22.h"
 

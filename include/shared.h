@@ -1,9 +1,10 @@
 #pragma once
 
+#include <Arduino.h>
 #include <Arduino_FreeRTOS.h>
 #include <queue.h>
 #include <semphr.h>
-
+#include <stdlib.h> 
 #include "types.h"
 
 /**

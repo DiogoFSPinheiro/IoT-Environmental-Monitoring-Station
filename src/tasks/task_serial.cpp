@@ -1,7 +1,3 @@
-#include <Arduino.h>
-#include <Arduino_FreeRTOS.h>
-#include <stdlib.h>   // dtostrf
-
 #include "shared.h"
 
 // dtostrf scratch buffer: sign + 5 digits + '.' + 2 decimals + NUL = 10 chars

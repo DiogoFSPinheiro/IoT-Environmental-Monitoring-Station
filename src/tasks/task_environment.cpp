@@ -1,7 +1,3 @@
-#include <Arduino.h>
-#include <Arduino_FreeRTOS.h>
-#include <semphr.h>
-
 #include "shared.h"
 #include "drv_bh1750.h"
 #include "drv_pir.h"
